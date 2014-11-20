@@ -104,3 +104,40 @@ c446317bf8a5: Download complete
 Status: Downloaded newer image for yungsang/flannel:latest
 core@localhost ~ $ 
 ```
+
+### A sample Vagrantfile for Fedora Atomic
+
+```ruby
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "yungsang/fedora-atomic"
+
+  config.vm.provision :shell do |sh|
+    sh.inline = <<-EOT
+      sudo echo 'OPTIONS="--selinux-enabled --registry-mirror http://192.168.33.201:5000"' > /etc/sysconfig/docker
+      sudo systemctl restart docker
+    EOT
+  end
+end
+```
+
+```
+$ cd samples/atomic
+$ vagrant up
+$ vagrant ssh
+[vagrant@localhost ~]$ docker pull yungsang/flannel
+Pulling repository yungsang/flannel
+f832658626da: Pulling image (latest) from yungsang/flannel, mirror: http://192.168.33.201:5000/v1/
+f832658626da: Download complete
+511136ea3c5a: Download complete
+50215b109eda: Download complete
+53f380325ee9: Download complete
+1281aa8c00fc: Download complete
+0d041d6eb31b: Download complete
+0df49300cb95: Download complete
+c446317bf8a5: Download complete
+7fad046ef01e: Download complete
+Status: Downloaded newer image for yungsang/flannel:latest
+[vagrant@localhost ~]$ 
+```
