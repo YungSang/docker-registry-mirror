@@ -1,4 +1,4 @@
-# Run a Docker Local Registry Mirror
+# Run a Docker Registry Mirror
 
 Cf.) https://github.com/docker/docker/blob/master/docs/sources/articles/registry_mirror.md
 
@@ -12,7 +12,7 @@ Cf.) https://github.com/docker/docker/blob/master/docs/sources/articles/registry
 - [VirtualBox](https://www.virtualbox.org/) >= v4.3.18
 - [Vagrant](https://www.vagrantup.com/) >= v1.6.5
 
-## Start a Docker Local Registry Mirror
+## Start a Docker Registry Mirror
 
 ```
 $ git clone https://github.com/YungSang/docker-registry-mirror.git
@@ -20,7 +20,7 @@ $ cd docker-registry-mirror
 $ vagrant up
 ```
 
-It starts a Docker Local Registry Mirror at http://192.168.33.201:5000 by default.  
+It starts a Docker Registry Mirror at http://192.168.33.201:5000 by default.  
 You can set any IP Address by editing the following line in Vagrantfile.
 
 ```ruby
