@@ -1,8 +1,11 @@
 # Run a Docker Local Registry Mirror
 
-- Run a Docker Registry Mirror as a container on boot2docker locally with Vagrant
-
 Cf.) https://github.com/docker/docker/blob/master/docs/sources/articles/registry_mirror.md
+
+## Features
+
+- Run a Docker Registry Mirror as a container on boot2docker locally with Vagrant
+- Mount a local directory onto the mirrored registry in the container for persistence
 
 ## Requirements
 
