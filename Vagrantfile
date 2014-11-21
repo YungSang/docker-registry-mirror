@@ -10,13 +10,11 @@ DOCKER_REGISTRY_UI = "docker-registry-frontend"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "docker-registry-mirror"
 
-  config.vm.box = "yungsang/boot2docker"
+  config.vm.box = "yungsang/coreos-alpha"
 
   config.vm.network :private_network, ip: "192.168.33.201"
 
-  config.vm.network :forwarded_port, guest: 2375, host: 2375, disabled: true
-
-  config.vm.synced_folder ".", "/vagrant"
+  config.vm.synced_folder ".", "/home/core/vagrant", id: "core", type: "nfs", mount_options: ["nolock", "vers=3", "udp"]
 
   config.vm.provision :shell do |sh|
     sh.inline = <<-EOT
@@ -28,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :docker do |d|
     d.run "#{DOCKER_REGISTRY}",
       image: "registry",
-      args: "-p 5000:5000 -e MIRROR_SOURCE=https://registry-1.docker.io -e MIRROR_SOURCE_INDEX=https://index.docker.io -e SQLALCHEMY_INDEX_DATABASE=sqlite:////tmp/registry/docker-registry.db -v /vagrant/registry:/tmp/registry"
+      args: "-p 5000:5000 -e MIRROR_SOURCE=https://registry-1.docker.io -e MIRROR_SOURCE_INDEX=https://index.docker.io -e SQLALCHEMY_INDEX_DATABASE=sqlite:////tmp/registry/docker-registry.db -v /home/core/vagrant/registry:/tmp/registry"
     d.run "#{DOCKER_REGISTRY_UI}",
       image: "konradkleine/docker-registry-frontend",
       args: "-p 80:80 --link #{DOCKER_REGISTRY}:#{DOCKER_REGISTRY} -e ENV_DOCKER_REGISTRY_HOST=#{DOCKER_REGISTRY} -e ENV_DOCKER_REGISTRY_PORT=5000"
