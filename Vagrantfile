@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :docker do |d|
     d.run "#{CONTAINER_NAME}",
       image: "registry",
-      args: "-p 5000:5000 -e STANDALONE=false -e MIRROR_SOURCE=https://registry-1.docker.io -e MIRROR_SOURCE_INDEX=https://index.docker.io -e SETTINGS_FLAVOR=local -v /vagrant/registry:/tmp/registry"
+      args: "-p 5000:5000 -e MIRROR_SOURCE=https://registry-1.docker.io -e MIRROR_SOURCE_INDEX=https://index.docker.io -e SETTINGS_FLAVOR=local -v /home/core/vagrant/registry:/tmp/registry"
   end
 
   config.vm.provision :shell, run: "always" do |sh|
