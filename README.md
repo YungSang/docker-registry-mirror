@@ -1,18 +1,20 @@
-# Run a Docker Registry Mirror
+# Docker Private Registry + Mirror + Web UI
 
-Cf.) https://github.com/docker/docker/blob/master/docs/sources/articles/registry_mirror.md
+Cf.) https://github.com/docker/docker/blob/master/docs/sources/articles/registry_mirror.md  
+Cf.) https://github.com/kwk/docker-registry-frontend  
 
 ## Features
 
-- Run a Docker Registry Mirror as a container on boot2docker locally with Vagrant
+- Run a Docker Private Registry + Mirror as a container locally with Vagrant
 - Mount a local directory onto the mirrored registry in the container for persistence
+- Run a Docker Private Registry Web UI as a container
 
 ## Requirements
 
 - [VirtualBox](https://www.virtualbox.org/) >= v4.3.18
 - [Vagrant](https://www.vagrantup.com/) >= v1.6.5
 
-## Start a Docker Registry Mirror
+## Start a Docker Private Registry + Mirror
 
 ```
 $ git clone https://github.com/YungSang/docker-registry-mirror.git
@@ -20,14 +22,20 @@ $ cd docker-registry-mirror
 $ vagrant up
 ```
 
-It starts a Docker Registry Mirror at http://192.168.33.201:5000 by default.  
+It starts a Docker Private Registry + Mirror at http://192.168.33.201:5000 by default.  
 You can set any IP Address by editing the following line in Vagrantfile.
 
 ```ruby
   config.vm.network :private_network, ip: "192.168.33.201"
 ```
 
-## Use the mirror from other Docker hosts
+## Open a Docker Private Registry Web UI
+
+```
+$ open http://192.168.33.201/
+```
+
+## Use the Registry + Mirror from other Docker hosts
 
 You have to set `--registry-mirror http://192.168.33.201:5000` as an additional parameter for Docker daemon and restart the daemon.
 
@@ -41,7 +49,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :shell do |sh|
     sh.inline = <<-EOT
-      sudo echo 'EXTRA_ARGS="--registry-mirror http://192.168.33.201:5000"' > /var/lib/boot2docker/profile
+      sudo echo 'EXTRA_ARGS="--registry-mirror http://192.168.33.201:5000 --insecure-registry 192.168.33.201:5000"' > /var/lib/boot2docker/profile
       sudo /etc/init.d/docker restart
     EOT
   end
@@ -78,7 +86,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :shell do |sh|
     sh.inline = <<-EOT
-      sudo echo 'DOCKER_OPTS="--registry-mirror http://192.168.33.201:5000"' > /run/docker_opts.env
+      sudo echo 'DOCKER_OPTS="--registry-mirror http://192.168.33.201:5000 --insecure-registry 192.168.33.201:5000"' > /run/docker_opts.env
       sudo systemctl restart docker
     EOT
   end
@@ -115,7 +123,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :shell do |sh|
     sh.inline = <<-EOT
-      sudo echo 'OPTIONS="--selinux-enabled --registry-mirror http://192.168.33.201:5000"' > /etc/sysconfig/docker
+      sudo echo 'OPTIONS="--selinux-enabled --registry-mirror http://192.168.33.201:5000 --insecure-registry 192.168.33.201:5000"' > /etc/sysconfig/docker
       sudo systemctl restart docker
     EOT
   end
