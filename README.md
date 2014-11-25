@@ -86,7 +86,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :shell do |sh|
     sh.inline = <<-EOT
-      sudo echo 'DOCKER_OPTS="--registry-mirror http://192.168.33.201:5000"' > /run/docker_opts.env
+      sudo echo 'DOCKER_OPTS="--registry-mirror http://192.168.33.201:5000 --insecure-registry 192.168.33.201:5000"' > /run/docker_opts.env
       sudo systemctl restart docker
     EOT
   end
