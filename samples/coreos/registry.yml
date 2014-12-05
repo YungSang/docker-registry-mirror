@@ -1,0 +1,21 @@
+#cloud-config
+
+write_files:
+  - path: /etc/systemd/system/docker.service.d/50-registry.conf
+    owner: core:core
+    permissions: 0644
+    content: |
+      [Service]
+      Environment="DOCKER_OPTS=--registry-mirror http://192.168.33.201:5000 --insecure-registry 192.168.33.201:5000"
+
+coreos:
+  units:
+    - name: daemon-reload.service
+      command: start
+      content: |
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/systemctl daemon-reload
+
+    - name: docker.service
+      command: restart
